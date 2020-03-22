@@ -3,7 +3,14 @@ def write_dicom(orgpath, newpath, savepath):
         Write dicom file using pydicom package.
         There are two dicom handling packages in python - SimpleITK and pydicom.
         As SimpleITK.WriteImage function does not support negative pixel value (Haunsfield unit), 
-        I strongly recommend readers to use pydicom when write dicom image.
+        I strongly recommend readers to use pydicom when write dicom images.
+        
+        Args:
+            orgpath  - original dicom file path
+            newpath  - new dicom file path (this file contains only Hounsfield value) 
+                       if this file is npy, np.load will load image. 
+                       if this file is not npy (i.e. .hdr, .dcm, .nii), SimpleITK will load image.
+            savepath - path for new dicom to be saved.
     """
     dcm = pydicom.read_file(orgpath)
     ds = pydicom.FileDataset(savepath.split('/')[-1], {}, file_meta=pydicom.Dataset(), preamble=("\0"*128).encode())
