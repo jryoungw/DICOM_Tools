@@ -1,3 +1,7 @@
+import numpy as np
+import SimpleITK as sitk
+import pydicom
+
 def write_dicom(orgpath, newpath, savepath):
     """
         Write dicom file using pydicom package.
