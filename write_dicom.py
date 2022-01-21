@@ -44,7 +44,7 @@ def save_dicom(orgpath, npy, config, idx):
     ds.is_little_endian = True
     
     ##################### If pixels are not written correctly, change this value to True #####################
-    ds.is_implicit_VR = True
+    ds.is_implicit_VR = False
     ########################################################################################################## 
     savepath = os.path.join(savepath, '{:05d}.dcm'.format(idx+1))
     ds.PixelData = npy.tostring()
