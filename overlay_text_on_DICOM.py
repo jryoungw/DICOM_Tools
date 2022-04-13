@@ -1,9 +1,15 @@
-def overlay_text(text:str, 
+from typing import Tuple
+import numpy as np
+
+def overlay_text(
+                 img:np.ndarray, 
+                 text:str, 
                  org_path:str, 
                  save_path:str, 
-                 position:Tuple(int, int)=(int(npy.shape[1]*0.1),int(npy.shape[0]*0.9))
+                 position_ratio:Tuple(float, float)= (0.1, 0.9),
                  text_thickness:int = 10
                 ) -> None:
+    position = (int(img.shape[1]*position_ratio[0]),int(img.shape[0]*position_ratio[0]))
     org = pydicom.dcmread(org_path)
     npy = org.pixel_array
     dummy = np.zeros(npy.shape)
