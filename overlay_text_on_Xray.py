@@ -7,9 +7,9 @@ def overlay_text(text:str,
     org = pydicom.dcmread(org_path)
     npy = org.pixel_array
     dummy = np.zeros(npy.shape)
-    text = cv2.putText(dummy, text, position, 0, 3, (255,255,255), text_thickness)
-    text = ((text / 255) * npy.max()).astype(npy.dtype)
-    overlay = np.maximum(text, npy)
+    text_img = cv2.putText(dummy, text, position, 0, 3, (255,255,255), text_thickness)
+    text_img = ((text_img / 255) * npy.max()).astype(npy.dtype)
+    overlay = np.maximum(text_img, npy)
     mod = pydicom.dcmread(org_path)
     mod.PixelData = overlay.tobytes()
     mod.file_meta.TransferSyntaxUID = '1.2.840.10008.1.2.1'
