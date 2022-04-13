@@ -1,11 +1,13 @@
-def overlay_text(text:str, org_path:str, save_path:str, is_ett:bool=True):
+def overlay_text(text:str, 
+                 org_path:str, 
+                 save_path:str, 
+                 position:Tuple(int, int)=(int(npy.shape[1]*0.1),int(npy.shape[0]*0.9))
+                 text_thickness:int = 10
+                ) -> None:
     org = pydicom.dcmread(org_path)
     npy = org.pixel_array
     dummy = np.zeros(npy.shape)
-    if is_ett:
-        text = cv2.putText(dummy, text, (int(npy.shape[1]*0.1),int(npy.shape[0]*0.9)), 0, 3, (255,255,255), 10)
-    else:
-        text = cv2.putText(dummy, text, (int(npy.shape[1]*0.1),int(npy.shape[0]*0.9)), 0, 3, (255,255,255), 10)
+    text = cv2.putText(dummy, text, position, 0, 3, (255,255,255), text_thickness)
     text = ((text / 255) * npy.max()).astype(npy.dtype)
     overlay = np.maximum(text, npy)
     mod = pydicom.dcmread(org_path)
