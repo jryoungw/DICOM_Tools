@@ -11,7 +11,7 @@ def overlay_text(
                 ) -> None:
     org = pydicom.dcmread(org_path)
     npy = org.pixel_array
-    position = (int(npy.shape[1]*position_ratio[0]),int(npy.shape[0]*position_ratio[0]))
+    position = (int(npy.shape[1]*position_ratio[0]),int(npy.shape[0]*position_ratio[1]))
     dummy = np.zeros(npy.shape)
     text_img = cv2.putText(dummy, text, position, 0, 3, (255,255,255), text_thickness)
     text_img = ((text_img / 255) * npy.max()).astype(npy.dtype)
