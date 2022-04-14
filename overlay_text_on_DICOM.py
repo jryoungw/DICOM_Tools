@@ -6,7 +6,7 @@ def overlay_text(
                  text:str, 
                  org_path:str, 
                  save_path:str, 
-                 position_ratio:Tuple(float, float)= (0.1, 0.9),
+                 position_ratio:Tuple[float, float]= (0.1, 0.9),
                  text_thickness:int = 10
                 ) -> None:
     position = (int(img.shape[1]*position_ratio[0]),int(img.shape[0]*position_ratio[0]))
