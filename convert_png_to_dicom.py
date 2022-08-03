@@ -1,3 +1,8 @@
+import pydicom
+import numpy as np
+import SimpleITK as sitk
+import cv2
+
 def png2dcm(
             img:str, 
             save_path:str,
@@ -59,3 +64,70 @@ def png2dcm(
     ds.ImageType = ['ORIGINAL', 'PRIMARY', '']
     ds.PixelData = img.tobytes()
     ds.save_as(save_path, write_like_original=False)
+
+def replace_only_pixels(orgpath, pngpath, savepath):
+    
+    """
+    Pixel replacement using template DICOM (orgpath).
+    """
+
+    img = cv2.imread(pngpath, -1)
+    if img.shape[-1] > 1:
+        try:
+            img = cv2.cvtColor(img, cv2.COLOR_RGBA2GRAY)
+        except:
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+    img = img.astype(np.uint16)
+    dcm = pydicom.dcmread(orgpath)
+    # print(dcm)
+    from pydicom.uid import ExplicitVRLittleEndian
+    ds = pydicom.dataset.Dataset()
+    ds.TransferSyntaxUID = ExplicitVRLittleEndian
+    ds.ImplementationClassUID = '1.1'
+    ds.FileMetaInformationVersion = b'\x00\x01'
+    ds.MediaStorageSOPClassUID = '10101010' # Arbitrary value
+    ds.MediaStorageSOPInstanceUID = '10101011' # Arbitrary value
+
+
+    ds = pydicom.FileDataset(savepath, {}, file_meta=ds, \
+                             preamble=("\0"*128).encode())
+    ds.ImageType=dcm.ImageType
+    ds.SOPClassUID=dcm.SOPClassUID
+    ds.SOPInstanceUID=dcm.SOPInstanceUID
+
+    methods = [i for i in dcm.__dir__() if '_' not in i]
+
+    for m in methods:
+        try:
+            exec('ds.'+m+'=dcm.'+m)
+        except:
+            print('[*] '+m+' is not implemented')
+    try:
+        ds.RescaleIntercept = '0'
+    except:
+        pass
+    try:
+        ds.RescaleSlope = '1'
+    except:
+        pass
+    try:
+        ds.WindowCenterWidthExplanation=dcm.WindowCenterWidthExplanation
+    except:
+        pass
+    ds.PixelSpacing = ''
+    ds.Rows = img.shape[0]
+    ds.Columns = img.shape[1]
+    ds.BitsAllocated = 16
+    ds.BitsStored = 12
+    ds.HighBit = 8
+    ds.SamplesPerPixel = 1
+    ds.WindowCenter = 127
+    ds.WindowWidth = 128
+
+    ds.is_little_endian = True
+    
+    ##################### If pixels are not written correctly, change this value to True #####################
+    ds.is_implicit_VR = False
+    ########################################################################################################## 
+    ds.PixelData = img.tobytes()
+    ds.save_as(savepath)
