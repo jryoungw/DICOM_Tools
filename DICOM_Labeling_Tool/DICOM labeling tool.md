@@ -32,7 +32,7 @@ Dicom을 레이블링 할 수 있는 pyqt 기반의 코드입니다.
 self.labels = [first, second, ...]
 ```
 
-에 본인이 원하는 target 값들을 지정해 놓으세요. 기본 값은 `good`과 `bad`입니다. 꼭 두 개일 필요가 없지만 `9개 이하의 label들만 지원합니다`. 더 많은 label을 필요로 하는 상황이라면 `29번째 줄`인 `exec`구문을 직접 노가다로 설정해 주어야 합니다.
+에 본인이 원하는 target 값들을 지정해 놓으세요. 기본 값은 `good`과 `bad`입니다. 꼭 두 개일 필요가 없지만 `9개 이하의 label들만 지원합니다`. 더 많은 label을 필요로 하는 상황이라면 [29번째 줄](https://github.com/jryoungw/DICOM_Tools/blob/master/DICOM_Labeling_Tool/DICOM_labeling.py#L29)인 `exec`구문을 직접 노가다로 설정해 주어야 합니다.
 
 # 실행법
 
