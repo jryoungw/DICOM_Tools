@@ -26,7 +26,7 @@ Dicom을 레이블링 할 수 있는 pyqt 기반의 코드입니다.
 
 ## DICOM_labeling_tool.py
 
-17번째 줄인
+(17번째 줄)[https://github.com/jryoungw/DICOM_Tools/blob/master/DICOM_Labeling_Tool/DICOM_labeling.py#L17]인
 
 ```python
 self.labels = [first, second, ...]
